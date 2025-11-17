@@ -1,23 +1,97 @@
-version: '3.8'
+stages:
+  - test
+  - build
+  - deploy
 
-services:
-  backend:
-    build: ./backend
-    ports:
-      - "5000:5000"
-    environment:
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - GITLAB_TOKEN=${GITLAB_TOKEN}
-      - FLASK_ENV=development
-    volumes:
-      - ./backend:/app
-    command: python app.py
+variables:
+  DOCKER_DRIVER: overlay2
+  BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_SHORT_SHA
+  FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
 
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:80"
-    depends_on:
-      - backend
-    environment:
-      - VITE_API_URL=http://localhost:5000
+# Test Backend
+test:backend:
+  stage: test
+  image: python:3.11-slim
+  before_script:
+    - cd backend
+    - pip install -r requirements.txt
+  script:
+    - python -m py_compile app.py
+    - python -c "from services.gitlab_service import GitLabService"
+    - python -c "from services.ai_service import AIService"
+  only:
+    - branches
+
+# Test Frontend
+test:frontend:
+  stage: test
+  image: node:18-alpine
+  before_script:
+    - cd frontend
+    - npm install
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - frontend/dist/
+    expire_in: 1 hour
+  only:
+    - branches
+
+# Build Backend Docker Image
+build:backend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - cd backend
+    - docker build -t $BACKEND_IMAGE .
+    - docker push $BACKEND_IMAGE
+    - docker tag $BACKEND_IMAGE $CI_REGISTRY_IMAGE/backend:latest
+    - docker push $CI_REGISTRY_IMAGE/backend:latest
+  only:
+    - main
+    - master
+
+# Build Frontend Docker Image
+build:frontend:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - cd frontend
+    - docker build -t $FRONTEND_IMAGE .
+    - docker push $FRONTEND_IMAGE
+    - docker tag $FRONTEND_IMAGE $CI_REGISTRY_IMAGE/frontend:latest
+    - docker push $CI_REGISTRY_IMAGE/frontend:latest
+  only:
+    - main
+    - master
+
+# Deploy to Production (Example for Render/AWS)
+deploy:production:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "Deploying to production..."
+    - echo "Backend image: $BACKEND_IMAGE"
+    - echo "Frontend image: $FRONTEND_IMAGE"
+    # Trigger deployment webhook (configure in GitLab CI/CD settings)
+    - |
+      if [ -n "$DEPLOY_WEBHOOK_URL" ]; then
+        curl -X POST $DEPLOY_WEBHOOK_URL
+      else
+        echo "No deployment webhook configured"
+      fi
+  only:
+    - main
+    - master
+  when: manual
