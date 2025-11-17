@@ -52,7 +52,6 @@ function App() {
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Sparkles className="w-4 h-4" />
             <span>Powered by Gemini AI</span>
-            <span>Built by <a href="https://zenyukti.in" target="_blank" rel="noopener noreferrer">Team ZenYukti</a></span>
           </div>
         </div>
       </header>
