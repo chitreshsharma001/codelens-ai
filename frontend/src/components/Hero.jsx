@@ -14,13 +14,17 @@ export default function Hero() {
         insights, automated documentation, and actionable improvement suggestions.
       </p>
 
+      <p className="text-gray-400 text-sm italic">
+        Powered by Gemini AI | Built by <a href="https://zenyukti.in" target="_blank" rel="noopener noreferrer">Team ZenYukti</a>
+      </p>
+
       {/* Features Grid */}
       <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto mt-12">
         <div className="card hover:border-gitlab-orange transition-all cursor-pointer">
           <Brain className="w-10 h-10 text-gitlab-orange mb-4 mx-auto" />
           <h3 className="font-bold mb-2">AI Analysis</h3>
           <p className="text-sm text-gray-400">
-            Deep code analysis powered by Claude AI
+            Deep code analysis powered by Gemini AI
           </p>
         </div>
 

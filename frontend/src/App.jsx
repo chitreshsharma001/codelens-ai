@@ -51,7 +51,8 @@ function App() {
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Sparkles className="w-4 h-4" />
-            <span>Powered by Claude AI</span>
+            <span>Powered by Gemini AI</span>
+            <span>Built by <a href="https://zenyukti.in" target="_blank" rel="noopener noreferrer">Team ZenYukti</a></span>
           </div>
         </div>
       </header>
@@ -97,9 +98,9 @@ function App() {
               GitLab
             </a>
             <span>•</span>
-            <a href="https://anthropic.com" target="_blank" rel="noopener noreferrer"
+            <a href="https://zenyukti.in" target="_blank" rel="noopener noreferrer"
                className="hover:text-gitlab-purple transition-colors">
-              Anthropic Claude
+                Team ZenYukti
             </a>
           </div>
         </div>

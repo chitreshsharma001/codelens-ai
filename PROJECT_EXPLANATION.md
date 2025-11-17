@@ -312,6 +312,7 @@ Special thanks to:
 - **Anthropic** for Claude AI API access
 - **E-Cell IIT Bombay** for organizing i-Hack 2025
 - **Open Source Community** for the amazing tools and libraries
+- **[ZenYukti](https://zenyukti.in)** for good developers to help across the project.
 
 ---
 

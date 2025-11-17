@@ -3,10 +3,10 @@
 > AI-Powered GitLab Repository Analysis & Documentation Generator
 
 [![GitLab](https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white)](https://gitlab.com)
-[![Claude AI](https://img.shields.io/badge/Claude-6E49CB?style=for-the-badge&logo=anthropic&logoColor=white)](https://anthropic.com)
+[![Gemini AI](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/docs)
 [![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 
-Built for **GitLab Hackathon Challenge 2025** | i-Hack, E-Summit IIT Bombay
+Built for **GitLab Hackathon Challenge 2025** | i-Hack, E-Summit IIT Bombay | By [Ayush Hardeniya](https://linkedin.com/in/ayushHardeniya)
 
 ---
 
@@ -288,8 +288,8 @@ Built for GitLab Hackathon Challenge 2025
 ## 🙏 Acknowledgments
 
 - **GitLab** - For the amazing DevSecOps platform
-- **Anthropic** - For Claude AI API
-- **E-Cell IIT Bombay** - For organizing i-Hack 2025
+- **Google AI Studio** - For providing free GEMINI_API_KEY 
+- 
 
 ---
 
@@ -303,7 +303,7 @@ For issues or questions:
 
 <div align="center">
 
-**Built with ❤️ using GitLab, Claude AI, React, and Python**
+**Built with ❤️ using GitLab, Gemini AI, React, and Python by [Ayush Hardeniya](https://github.com/ayushHardeniya)**
 
 [Live Demo](#) | [Documentation](#) | [Video Demo](#)
 
