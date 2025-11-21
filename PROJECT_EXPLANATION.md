@@ -298,9 +298,9 @@ docker-compose up --build
 
 ## 📞 Contact & Links
 
-- **GitLab Repository**: [Link to repo]
-- **Live Demo**: [Link to deployed app]
-- **Demo Video**: [Link to video]
+- **GitLab Repository**: [https://gitlab.com/ayushHardeniya/repoinsight-ai]
+- **Live Demo**: [https://repoinsight-ai-frontend.onrender.com]
+- **Demo Video**: []
 - **Email**: [work@ayushhardeniya.site]
 
 ---

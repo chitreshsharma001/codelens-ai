@@ -1,12 +1,15 @@
 # 🚀 RepoInsight AI
 
+### Check Live Project
+[Click Here](https://repoinsight-ai-frontend.onrender.com/)
+
 > AI-Powered GitLab Repository Analysis & Documentation Generator
 
 [![GitLab](https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white)](https://gitlab.com)
 [![Gemini AI](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/docs)
 [![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 
-Built for **GitLab Hackathon Challenge 2025** | i-Hack, E-Summit IIT Bombay | By [Ayush Hardeniya](https://linkedin.com/in/ayushHardeniya)
+Built for **GitLab Hackathon Challenge 2025** | i-Hack, E-Summit IIT Bombay | By [Team ZenYukti](https://zenyukti.in)
 
 ---
 
@@ -66,7 +69,7 @@ Developers spend countless hours:
      │       │
      │       └──────────► GitLab API
      │
-     └──────────────────► Claude AI (Anthropic)
+     └──────────────────► Gemini AI (Anthropic)
 ```
 
 ---
@@ -99,7 +102,7 @@ Developers spend countless hours:
 - Node.js 18+
 - Python 3.11+
 - Docker & Docker Compose (optional)
-- Anthropic API Key ([Get one here](https://console.anthropic.com/))
+- Gemini API Key ([Get one here](https://aistudio.google.com/app/api-keys))
 
 ### 1️⃣ Clone Repository
 ```bash
@@ -139,6 +142,75 @@ cd frontend
 npm install
 npm run dev
 ```
+
+---
+
+## 🏗️ Development Timeline
+
+### Phase 1: Local Development (October - Mid November)
+**Duration:** ~3-4 weeks  
+**Environment:** Local development on personal machine
+
+During this phase, we focused on rapid prototyping and core features:
+- Built Flask backend API locally
+- Developed React frontend with Vite
+- Integrated Google Gemini AI for analysis
+- Tested with localhost:5000 (backend) and localhost:3000 (frontend)
+- Iteratively refined features based on testing
+
+**Tech Stack Decisions:**
+- Backend: Python Flask (lightweight, easy to test locally)
+- Frontend: React + Vite (fast refresh, great DX)
+- AI: Google Gemini (free API, no credit card needed)
+- Database: JSON-based (simple for MVP)
+
+### Phase 2: GitLab Migration & Cloud Deployment (Nov 16-19)
+**Duration:** 3-4 days  
+**Focus:** Production deployment and version control
+
+Key activities:
+- ✅ Uploaded codebase to GitLab
+- ✅ Deployed backend to Render.com
+- ✅ Deployed frontend to Render.com  
+- ✅ Configured environment variables (API keys, URLs)
+- ✅ Connected frontend to production backend API
+- ✅ Tested end-to-end in production
+
+**Why this sequence?**
+This is a common startup approach: build locally until it works, 
+then invest time in proper deployment and DevOps.
+
+### Phase 3: GitLab DevSecOps Enhancement (Nov 20-22)
+**Duration:** 2-3 days  
+**Focus:** Showcase GitLab platform capabilities for hackathon
+
+Enhancements for GitLab Hackathon Challenge:
+- 🔄 Comprehensive CI/CD pipeline
+- 🔒 Security scanning (SAST, Dependency, Secret Detection)
+- 📦 Container Registry integration
+- 📊 Project management (Issues, Milestones)
+- 📝 Documentation and demo materials
+
+**Why separate phases?**
+We wanted a working product first (MVP mindset), then added 
+enterprise-grade DevSecOps practices using GitLab's native features.
+
+---
+
+## 💡 Development Approach
+
+**"Build → Deploy → Enhance"**
+
+This reflects real-world development:
+1. **Build** locally with fast iteration
+2. **Deploy** when MVP is solid
+3. **Enhance** with CI/CD and security
+
+This approach let us:
+- ✅ Focus on product-market fit first
+- ✅ Avoid premature optimization
+- ✅ Add DevOps when architecture is stable
+- ✅ Demonstrate both product AND platform skills
 
 ---
 
@@ -252,7 +324,6 @@ repoinsight-ai/
 
 ### 📄 Key Documents
 - **README.md** - This file
-- **PROJECT_EXPLANATION.md** - Detailed submission document
 - **Demo Video** - Linked above
 
 ---
@@ -275,7 +346,7 @@ MIT License - feel free to use this project!
 
 ---
 
-## 👥 Team
+## 👥 [Team ZenYukti](https://zenyukti.in)
 
 Built for GitLab Hackathon Challenge 2025
 
@@ -289,7 +360,6 @@ Built for GitLab Hackathon Challenge 2025
 
 - **GitLab** - For the amazing DevSecOps platform
 - **Google AI Studio** - For providing free GEMINI_API_KEY 
-- 
 
 ---
 
@@ -298,6 +368,7 @@ Built for GitLab Hackathon Challenge 2025
 For issues or questions:
 - Create an issue in GitLab
 - Email: [work@ayushhardeniya.site]
+- Website: [https://zenyukti.in]
 
 ---
 
@@ -305,6 +376,6 @@ For issues or questions:
 
 **Built with ❤️ using GitLab, Gemini AI, React, and Python by [Ayush Hardeniya](https://github.com/ayushHardeniya)**
 
-[Live Demo](#) | [Documentation](#) | [Video Demo](#)
+[Live Demo](https://repoinsight-ai-frontend.onrender.com/) | [Documentation](#) | [Video Demo](#)
 
 </div>
