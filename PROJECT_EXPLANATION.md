@@ -1,7 +1,7 @@
 # RepoInsight AI - Project Explanation
 
 **GitLab Hackathon Challenge 2025 Submission**  
-**Team**: [Your Team Name]  
+**Team**: ZenYukti 
 **Track**: GitLab CodeForge
 
 ---
