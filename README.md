@@ -376,6 +376,6 @@ For issues or questions:
 
 **Built with ❤️ using GitLab, Gemini AI, React, and Python by [Ayush Hardeniya](https://github.com/ayushHardeniya)**
 
-[Live Demo](https://repoinsight-ai-frontend.onrender.com/) | [Documentation](#) | [Video Demo](#)
+[Live Demo](https://repoinsight-ai-frontend.onrender.com/) | [Video Demo](#)
 
 </div>
