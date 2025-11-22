@@ -1,0 +1,12 @@
+# Configuration Management (for Configure & Monitor Points)
+
+.environment_defaults:
+  variables:
+    ENVIRONMENT_BASE_URL: "https://repoinsight.gitlab.io"
+    ENVIRONMENT_VERSION: "v1.0.0-hackathon"
+    CI_ARTIFACT_EXPIRY: "30 days"
+
+.production_settings:
+  environment:
+    name: production
+    url: https://repoinsight-ai-frontend.onrender.com
