@@ -1,21 +1,17 @@
-# FINAL CI/CD PIPELINE
-# Integrates all DevSecOps and AI features for maximum score
+# FINAL HACKATHON CI/CD PIPELINE
 
-# Include Security Templates and Environment Configuration
 include:
-  # Security Templates 
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
-  # Environment Configuration 
   - local: .gitlab/ci/environments.yml 
 
 stages:
   - test        
   - security    
   - build       
-  - monitor     # New Monitioring Stage
+  - monitor     
   - deploy      
   - release     
 
@@ -34,12 +30,11 @@ test:backend:
     - pip install -r requirements.txt
     - python -m py_compile app.py
     - python -c "from services.gitlab_service import GitLabService"
-    - echo "✅ Backend integrity checks passed"
+    - echo "Backend integrity checks passed"
   only:
     - main
     - master
 
-# AI Agentic Workflow (10 Points + Bonus)
 ai:auto_review:
   stage: test 
   image: python:3.11-slim
@@ -50,7 +45,7 @@ ai:auto_review:
     - merge_requests 
   allow_failure: true
 
-# 2. SECURITY STAGE (Template jobs)
+# 2. SECURITY STAGE
 sast:
   stage: security
 
@@ -66,7 +61,6 @@ container_scanning:
 
 
 # 3. BUILD STAGE 
-
 build:backend:
   stage: build
   image: docker:latest
@@ -78,7 +72,7 @@ build:backend:
     - docker push $BACKEND_IMAGE
     - docker tag $BACKEND_IMAGE $CI_REGISTRY_IMAGE/backend:latest
     - docker push $CI_REGISTRY_IMAGE/backend:latest
-    - echo "✅ Backend image pushed to registry"
+    - echo "Backend image pushed to registry"
   only:
     - main
     - master
@@ -94,14 +88,13 @@ build:frontend:
     - docker push $FRONTEND_IMAGE
     - docker tag $FRONTEND_IMAGE $CI_REGISTRY_IMAGE/frontend:latest
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
-    - echo "✅ Frontend image pushed to registry"
+    - echo "Frontend image pushed to registry"
   only:
     - main
     - master
 
 
-# 4. MONITOR STAGE (Health Checks)
-
+# 4. MONITOR STAGE
 health_monitor:
   stage: monitor
   image: python:3.11-slim
@@ -115,7 +108,6 @@ health_monitor:
 
 
 # 5. DEPLOY & RELEASE STAGES
-
 deploy:production:
   stage: deploy
   image: alpine:latest
