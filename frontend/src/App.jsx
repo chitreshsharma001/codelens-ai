@@ -17,7 +17,7 @@ function App() {
     setResults(null)
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://repoinsight-ai.onrender.com'
       console.log('API URL:', apiUrl)
       const response = await fetch(`${apiUrl}/api/analyze`, {
         method: 'POST',
