@@ -367,14 +367,14 @@ Built for GitLab Hackathon Challenge 2025
 
 For issues or questions:
 - Create an issue in GitLab
-- Email: [work@ayushhardeniya.site]
+- Email: [support@zenyukti.in]
 - Website: [https://zenyukti.in]
 
 ---
 
 <div align="center">
 
-**Built with ❤️ using GitLab, Gemini AI, React, and Python by [Ayush Hardeniya](https://github.com/ayushHardeniya)**
+**Built with ❤️ using GitLab, Gemini AI, React, and Python by [Team ZenYukti](https://zenyukti.in)**
 
 [Live Demo](https://repoinsight-ai-frontend.onrender.com/) | [Video Demo](#)
 

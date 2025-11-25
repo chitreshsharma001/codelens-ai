@@ -47,7 +47,7 @@ function App() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <GitlabIcon className="w-8 h-8 text-gitlab-orange" />
-            <h1 className="text-2xl font-bold gradient-text">RepoInsight AI</h1>
+            <h1 className="text-2xl font-bold gradient-text"><a href="https://repoinsight-ai-frontend.onrender.com/">RepoInsight AI</a></h1>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Sparkles className="w-4 h-4" />

@@ -301,7 +301,7 @@ docker-compose up --build
 - **GitLab Repository**: [https://gitlab.com/ayushHardeniya/repoinsight-ai]
 - **Live Demo**: [https://repoinsight-ai-frontend.onrender.com]
 - **Demo Video**: []
-- **Email**: [work@ayushhardeniya.site]
+- **Email**: [support@zenyukti.in]
 
 ---
 
