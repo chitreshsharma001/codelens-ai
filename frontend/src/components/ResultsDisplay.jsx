@@ -7,7 +7,16 @@ import {
 export default function ResultsDisplay({ results }) {
   const [activeTab, setActiveTab] = useState('overview')
 
-  const { repository, analysis, documentation, suggestions } = results
+  if (!results) return null
+
+  const { repository, analysis, documentation } = results
+  const suggestions = analysis?.suggestions || []
+
+  // Debug: Log the data to console
+  console.log('Repository:', repository)
+  console.log('Analysis overview:', analysis?.overview)
+  console.log('Tech stack from AI:', analysis?.overview?.tech_stack)
+  console.log('Languages from GitLab:', repository?.languages)
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: CheckCircle },
@@ -32,7 +41,7 @@ export default function ResultsDisplay({ results }) {
             <p className="text-gray-400">{repository.description}</p>
           </div>
           <a 
-            href={repository.web_url || '#'} 
+            href={repository.url || repository.web_url || '#'} 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-gitlab-orange hover:text-gitlab-purple transition-colors"
@@ -44,16 +53,18 @@ export default function ResultsDisplay({ results }) {
         <div className="flex flex-wrap gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <Star className="w-4 h-4" />
-            <span>{repository.stars} stars</span>
+            <span>{repository.stars || 0} stars</span>
           </div>
           <div className="flex items-center gap-2">
             <GitFork className="w-4 h-4" />
-            <span>{repository.forks} forks</span>
+            <span>{repository.forks || 0} forks</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Code className="w-4 h-4" />
-            <span>{repository.language}</span>
-          </div>
+          {repository.languages && Object.keys(repository.languages).length > 0 && (
+            <div className="flex items-center gap-2">
+              <Code className="w-4 h-4" />
+              <span>{Object.keys(repository.languages)[0]}</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -88,77 +99,231 @@ export default function ResultsDisplay({ results }) {
                 <TrendingUp className="w-6 h-6 text-gitlab-orange" />
                 Project Overview
               </h3>
-              <p className="text-gray-300 leading-relaxed">{analysis.overview}</p>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-gray-300 mb-2">Summary</h4>
+                  <p className="text-gray-400 leading-relaxed">{analysis.overview?.summary}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-300 mb-2">Purpose</h4>
+                  <p className="text-gray-400">{analysis.overview?.purpose}</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-300 mb-2">Project Type</h4>
+                  <p className="text-gray-400">{analysis.overview?.project_type}</p>
+                </div>
+                {analysis.overview?.tech_stack && (
+                  <div>
+                    <h4 className="font-semibold text-gray-300 mb-2">Tech Stack</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {analysis.overview.tech_stack.map((tech, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="card">
               <h3 className="text-xl font-bold mb-4">Code Quality Assessment</h3>
-              <p className="text-gray-300 leading-relaxed">{analysis.code_quality}</p>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-300 font-semibold">Quality Score</span>
+                  <span className="text-3xl font-bold text-green-400">{analysis.code_quality?.score}/10</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div 
+                    className="bg-gradient-to-r from-gitlab-orange to-gitlab-purple h-3 rounded-full transition-all"
+                    style={{ width: `${(analysis.code_quality?.score || 0) * 10}%` }}
+                  ></div>
+                </div>
+                {analysis.code_quality?.assessment && (
+                  <div>
+                    <h4 className="font-semibold text-gray-300 mb-2">Assessment</h4>
+                    <p className="text-gray-400 leading-relaxed whitespace-pre-line">{analysis.code_quality.assessment}</p>
+                  </div>
+                )}
+                {analysis.code_quality?.strengths && (
+                  <div>
+                    <h4 className="font-semibold text-green-400 mb-2">✅ Strengths</h4>
+                    <ul className="list-disc list-inside space-y-1 text-gray-400">
+                      {analysis.code_quality.strengths.map((strength, idx) => (
+                        <li key={idx}>{strength}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {analysis.code_quality?.weaknesses && (
+                  <div>
+                    <h4 className="font-semibold text-red-400 mb-2">⚠️ Weaknesses</h4>
+                    <ul className="list-disc list-inside space-y-1 text-gray-400">
+                      {analysis.code_quality.weaknesses.map((weakness, idx) => (
+                        <li key={idx}>{weakness}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="card">
-                <h3 className="text-xl font-bold mb-4 text-green-400">Strengths</h3>
-                <ul className="space-y-2">
-                  {analysis.strengths && analysis.strengths.map((strength, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-300">{strength}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {(analysis.code_quality?.strengths || analysis.code_quality?.weaknesses) && (
+              <div className="grid md:grid-cols-2 gap-6">
+                {analysis.code_quality?.strengths && (
+                  <div className="card">
+                    <h3 className="text-xl font-bold mb-4 text-green-400">Strengths</h3>
+                    <ul className="space-y-2">
+                      {analysis.code_quality.strengths.map((strength, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-300">{strength}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-              <div className="card">
-                <h3 className="text-xl font-bold mb-4 text-yellow-400">Areas for Improvement</h3>
-                <ul className="space-y-2">
-                  {analysis.areas_for_improvement && analysis.areas_for_improvement.map((area, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-300">{area}</span>
-                    </li>
-                  ))}
-                </ul>
+                {analysis.code_quality?.weaknesses && (
+                  <div className="card">
+                    <h3 className="text-xl font-bold mb-4 text-yellow-400">Areas for Improvement</h3>
+                    <ul className="space-y-2">
+                      {analysis.code_quality.weaknesses.map((area, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-300">{area}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
 
             <div className="card">
               <h3 className="text-xl font-bold mb-4">Technology Stack</h3>
               <div className="flex flex-wrap gap-2">
-                {analysis.tech_stack && analysis.tech_stack.map((tech, i) => (
-                  <span 
-                    key={i}
-                    className="px-4 py-2 bg-gitlab-purple bg-opacity-20 border border-gitlab-purple rounded-lg text-sm"
-                  >
-                    {tech}
-                  </span>
-                ))}
+                {analysis.overview?.tech_stack && analysis.overview.tech_stack.length > 0 ? (
+                  analysis.overview.tech_stack.map((tech, i) => (
+                    <span 
+                      key={i}
+                      className="px-4 py-2 bg-gitlab-purple bg-opacity-20 border border-gitlab-purple rounded-lg text-sm"
+                    >
+                      {tech}
+                    </span>
+                  ))
+                ) : repository?.languages && Object.keys(repository.languages).length > 0 ? (
+                  Object.keys(repository.languages).map((lang, i) => (
+                    <span 
+                      key={i}
+                      className="px-4 py-2 bg-gitlab-purple bg-opacity-20 border border-gitlab-purple rounded-lg text-sm"
+                    >
+                      {lang}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-gray-400">Unable to detect technology stack</p>
+                )}
               </div>
             </div>
 
-            <div className="card">
-              <h3 className="text-xl font-bold mb-4">Complexity Score</h3>
-              <p className="text-gray-300 leading-relaxed">{analysis.complexity_score}</p>
-            </div>
+            {analysis.complexity && (
+              <div className="card">
+                <h3 className="text-xl font-bold mb-4">Complexity Analysis</h3>
+                <div className="space-y-4">
+                  {analysis.complexity?.score && (
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-gray-300 font-semibold">Complexity Score</span>
+                      <span className="text-3xl font-bold text-blue-400">{analysis.complexity.score}/10</span>
+                    </div>
+                  )}
+                  {analysis.complexity?.explanation && (
+                    <div>
+                      <h4 className="font-semibold text-gray-300 mb-2">Explanation</h4>
+                      <p className="text-gray-400 leading-relaxed whitespace-pre-line">{analysis.complexity.explanation}</p>
+                    </div>
+                  )}
+                  {analysis.complexity?.factors && (
+                    <div>
+                      <h4 className="font-semibold text-gray-300 mb-2">Complexity Factors</h4>
+                      <ul className="list-disc list-inside space-y-1 text-gray-400">
+                        {analysis.complexity.factors.map((factor, idx) => (
+                          <li key={idx}>{factor}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
         {/* Analysis Tab */}
         {activeTab === 'analysis' && analysis && (
-          <div className="card">
-            <h3 className="text-2xl font-bold mb-6 gradient-text">Detailed Analysis</h3>
-            <div className="space-y-6">
-              <div>
-                <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Overview</h4>
-                <p className="text-gray-300 leading-relaxed">{analysis.overview}</p>
+          <div className="space-y-6">
+            <div className="card">
+              <h3 className="text-2xl font-bold mb-6 gradient-text">Architecture Insights</h3>
+              <div className="space-y-4">
+                {analysis.architecture?.pattern && (
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Architecture Pattern</h4>
+                    <span className="inline-block px-4 py-2 bg-purple-900/30 border border-purple-500 rounded-lg text-purple-300">
+                      {analysis.architecture.pattern}
+                    </span>
+                  </div>
+                )}
+                {analysis.architecture?.structure && (
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Structure</h4>
+                    <p className="text-gray-300 leading-relaxed whitespace-pre-line">{analysis.architecture.structure}</p>
+                  </div>
+                )}
+                {analysis.architecture?.components && analysis.architecture.components.length > 0 && (
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Key Components</h4>
+                    <ul className="list-disc list-inside space-y-1 text-gray-300">
+                      {analysis.architecture.components.map((component, idx) => (
+                        <li key={idx}>{component}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {!analysis.architecture?.pattern && !analysis.architecture?.structure && !analysis.architecture?.components && (
+                  <p className="text-gray-400">Architecture analysis unavailable</p>
+                )}
               </div>
-              <div>
-                <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Code Quality</h4>
-                <p className="text-gray-300 leading-relaxed">{analysis.code_quality}</p>
-              </div>
-              <div>
-                <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Complexity</h4>
-                <p className="text-gray-300 leading-relaxed">{analysis.complexity_score}</p>
+            </div>
+
+            <div className="card">
+              <h3 className="text-2xl font-bold mb-6 gradient-text">Complexity Metrics</h3>
+              <div className="space-y-4">
+                {analysis.complexity?.score && (
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-lg font-semibold text-gray-300">Complexity Score</span>
+                    <span className="text-4xl font-bold text-blue-400">{analysis.complexity.score}/10</span>
+                  </div>
+                )}
+                {analysis.complexity?.explanation && (
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Explanation</h4>
+                    <p className="text-gray-300 leading-relaxed whitespace-pre-line">{analysis.complexity.explanation}</p>
+                  </div>
+                )}
+                {analysis.complexity?.factors && analysis.complexity.factors.length > 0 && (
+                  <div>
+                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Complexity Factors</h4>
+                    <ul className="list-disc list-inside space-y-2 text-gray-300">
+                      {analysis.complexity.factors.map((factor, idx) => (
+                        <li key={idx}>{factor}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {!analysis.complexity?.score && !analysis.complexity?.explanation && !analysis.complexity?.factors && (
+                  <p className="text-gray-400">Complexity analysis unavailable</p>
+                )}
               </div>
             </div>
           </div>
@@ -167,14 +332,256 @@ export default function ResultsDisplay({ results }) {
         {/* Documentation Tab */}
         {activeTab === 'docs' && documentation && (
           <div className="space-y-6">
-            {Object.entries(documentation).map(([key, value]) => (
-              <div key={key} className="card">
-                <h3 className="text-xl font-bold mb-4 capitalize">
-                  {key.replace(/_/g, ' ')}
-                </h3>
-                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{value}</p>
+            {/* README Section */}
+            {documentation.readme && (
+              <div className="card">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-2xl font-bold gradient-text">📄 README</h3>
+                  <button 
+                    onClick={() => {
+                      const blob = new Blob([documentation.readme.content || ''], { type: 'text/markdown' });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement('a');
+                      a.href = url;
+                      a.download = 'README.md';
+                      a.click();
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-gitlab-orange hover:bg-gitlab-purple transition-colors rounded-lg"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download README.md
+                  </button>
+                </div>
+                {documentation.readme.description && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-gray-300 mb-2">Description</h4>
+                    <p className="text-gray-400 leading-relaxed whitespace-pre-line">{documentation.readme.description}</p>
+                  </div>
+                )}
+                {documentation.readme.features && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-gray-300 mb-2">Key Features</h4>
+                    <ul className="list-disc list-inside space-y-1 text-gray-400">
+                      {documentation.readme.features.map((feature, idx) => (
+                        <li key={idx}>{feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {documentation.readme.content && (
+                  <div>
+                    <h4 className="font-semibold text-gray-300 mb-2">Full Content</h4>
+                    <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                      {documentation.readme.content}
+                    </pre>
+                  </div>
+                )}
               </div>
-            ))}
+            )}
+
+            {/* Getting Started Section */}
+            {documentation.getting_started && (
+              <div className="card">
+                <h3 className="text-2xl font-bold mb-4 gradient-text">🚀 Getting Started</h3>
+                <div className="space-y-4">
+                  {documentation.getting_started.prerequisites && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Prerequisites</h4>
+                      <ul className="list-disc list-inside space-y-1 text-gray-300">
+                        {documentation.getting_started.prerequisites.map((req, idx) => (
+                          <li key={idx}>{req}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {documentation.getting_started.installation && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Installation Steps</h4>
+                      <ol className="list-decimal list-inside space-y-1 text-gray-300">
+                        {documentation.getting_started.installation.map((step, idx) => (
+                          <li key={idx}>{step}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+                  {documentation.getting_started.quick_start && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Quick Start</h4>
+                      <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                        {documentation.getting_started.quick_start}
+                      </pre>
+                    </div>
+                  )}
+                  {documentation.getting_started.configuration && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Configuration</h4>
+                      <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                        {documentation.getting_started.configuration}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* API Endpoints Section */}
+            {documentation.api_endpoints && documentation.api_endpoints.available && (
+              <div className="card">
+                <h3 className="text-2xl font-bold mb-4 gradient-text">🔌 API Endpoints</h3>
+                <div className="space-y-4">
+                  {documentation.api_endpoints.endpoints && documentation.api_endpoints.endpoints.map((endpoint, idx) => (
+                    <div key={idx} className="p-4 bg-gray-800 rounded-lg">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className={`px-3 py-1 rounded font-mono text-sm ${
+                          endpoint.method === 'GET' ? 'bg-green-900 text-green-300' :
+                          endpoint.method === 'POST' ? 'bg-blue-900 text-blue-300' :
+                          endpoint.method === 'PUT' ? 'bg-yellow-900 text-yellow-300' :
+                          'bg-red-900 text-red-300'
+                        }`}>
+                          {endpoint.method}
+                        </span>
+                        <span className="font-mono text-gray-300">{endpoint.path}</span>
+                      </div>
+                      <p className="text-gray-400 mb-2">{endpoint.description}</p>
+                      {endpoint.parameters && (
+                        <div className="mb-2">
+                          <span className="text-sm font-semibold text-gray-400">Parameters:</span>
+                          <pre className="mt-1 text-xs text-gray-500">{JSON.stringify(endpoint.parameters, null, 2)}</pre>
+                        </div>
+                      )}
+                      {endpoint.example && (
+                        <div>
+                          <span className="text-sm font-semibold text-gray-400">Example:</span>
+                          <pre className="mt-1 bg-gray-900 p-2 rounded text-xs text-gray-300 overflow-x-auto">
+                            {endpoint.example}
+                          </pre>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Architecture Section */}
+            {documentation.architecture && (
+              <div className="card">
+                <h3 className="text-2xl font-bold mb-4 gradient-text">🏗️ Architecture</h3>
+                <div className="space-y-4">
+                  {documentation.architecture.overview && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Overview</h4>
+                      <p className="text-gray-300 leading-relaxed whitespace-pre-line">{documentation.architecture.overview}</p>
+                    </div>
+                  )}
+                  {documentation.architecture.diagram && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">System Diagram</h4>
+                      <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300">
+                        {documentation.architecture.diagram}
+                      </pre>
+                    </div>
+                  )}
+                  {documentation.architecture.technologies && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Technologies</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {Object.entries(documentation.architecture.technologies).map(([category, tech]) => (
+                          <div key={category} className="p-3 bg-gray-800 rounded">
+                            <div className="font-semibold text-gray-300 mb-1">{category}</div>
+                            <div className="text-sm text-gray-400">{tech}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {documentation.architecture.folder_structure && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Folder Structure</h4>
+                      <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                        {documentation.architecture.folder_structure}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Contributing Section */}
+            {documentation.contributing && (
+              <div className="card">
+                <h3 className="text-2xl font-bold mb-4 gradient-text">🤝 Contributing</h3>
+                <div className="space-y-4">
+                  {documentation.contributing.guidelines && (
+                    <div>
+                      <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                        {documentation.contributing.guidelines}
+                      </pre>
+                    </div>
+                  )}
+                  {documentation.contributing.code_style && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Code Style</h4>
+                      <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                        {documentation.contributing.code_style}
+                      </pre>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Usage Section */}
+            {documentation.usage && (
+              <div className="card">
+                <h3 className="text-2xl font-bold mb-4 gradient-text">📖 Usage Guide</h3>
+                <div className="space-y-4">
+                  {documentation.usage.basic_usage && (
+                    <div>
+                      <pre className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                        {documentation.usage.basic_usage}
+                      </pre>
+                    </div>
+                  )}
+                  {documentation.usage.examples && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Examples</h4>
+                      <div className="space-y-3">
+                        {documentation.usage.examples.map((example, idx) => (
+                          <pre key={idx} className="bg-gray-900 p-4 rounded-lg overflow-x-auto text-sm text-gray-300 whitespace-pre-wrap">
+                            {example}
+                          </pre>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {documentation.usage.common_tasks && (
+                    <div>
+                      <h4 className="font-semibold text-gitlab-orange mb-2">Common Tasks</h4>
+                      <div className="space-y-4">
+                        {documentation.usage.common_tasks.map((task, idx) => (
+                          <div key={idx} className="p-4 bg-gray-800 rounded-lg">
+                            <h5 className="font-semibold text-gray-300 mb-2">{task.task}</h5>
+                            {task.steps && (
+                              <ol className="list-decimal list-inside space-y-1 text-gray-400 mb-2">
+                                {task.steps.map((step, stepIdx) => (
+                                  <li key={stepIdx}>{step}</li>
+                                ))}
+                              </ol>
+                            )}
+                            {task.code && (
+                              <pre className="bg-gray-900 p-3 rounded text-xs text-gray-300 overflow-x-auto">
+                                {task.code}
+                              </pre>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
 
