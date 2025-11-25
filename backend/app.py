@@ -1,8 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+from dotenv import load_dotenv
 from services.gitlab_service import GitLabService
 from services.ai_service import AIService
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for React frontend
@@ -34,7 +38,7 @@ def analyze_repository():
         
         # Step 1: Fetch repository data from GitLab
         print(f"Fetching repository data for: {repo_url}")
-        repo_data = gitlab_service.fetch_repository_data(repo_url)
+        repo_data = gitlab_service.get_repository_data(repo_url)
         
         if not repo_data:
             return jsonify({'error': 'Could not fetch repository data. Check URL and permissions.'}), 400
@@ -45,24 +49,20 @@ def analyze_repository():
         
         # Step 3: Generate documentation
         print("Generating documentation...")
-        documentation = ai_service.generate_documentation(repo_data)
-        
-        # Step 4: Get improvement suggestions
-        print("Getting improvement suggestions...")
-        suggestions = ai_service.get_suggestions(repo_data)
+        documentation = ai_service.generate_documentation(repo_data, analysis)
         
         return jsonify({
             'success': True,
             'repository': {
                 'name': repo_data.get('name'),
                 'description': repo_data.get('description'),
-                'language': repo_data.get('language'),
+                'url': repo_data.get('web_url'),
+                'languages': repo_data.get('languages', {}),
                 'stars': repo_data.get('star_count', 0),
                 'forks': repo_data.get('forks_count', 0)
             },
             'analysis': analysis,
-            'documentation': documentation,
-            'suggestions': suggestions
+            'documentation': documentation
         })
         
     except Exception as e:
