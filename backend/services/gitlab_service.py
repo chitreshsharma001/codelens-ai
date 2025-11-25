@@ -1,100 +1,158 @@
 import requests
 import os
-from urllib.parse import quote
+from typing import Dict, List, Optional
 
 class GitLabService:
     def __init__(self):
-        # GitLab API token (optional - public repos don't need it)
-        self.token = os.environ.get('GITLAB_TOKEN', '')
-        self.base_url = 'https://gitlab.com/api/v4'
-        
-    def fetch_repository_data(self, repo_url):
+        self.base_url = "https://gitlab.com/api/v4"
+        self.token = os.getenv('GITLAB_API_TOKEN')
+        self.headers = {
+            'PRIVATE-TOKEN': self.token
+        } if self.token else {}
+    
+    def get_repository_data(self, repo_url: str) -> Dict:
         """
-        Fetch repository data from GitLab API
-        repo_url: https://gitlab.com/username/project
+        Fetch comprehensive repository data from GitLab
         """
         try:
             # Extract project path from URL
-            # Example: https://gitlab.com/gitlab-org/gitlab -> gitlab-org/gitlab
-            parts = repo_url.replace('https://gitlab.com/', '').replace('http://gitlab.com/', '')
-            project_path = parts.split('?')[0].strip('/')
+            project_path = self._extract_project_path(repo_url)
             
-            # URL encode the project path
-            encoded_path = quote(project_path, safe='')
+            if not project_path:
+                raise ValueError("Invalid GitLab repository URL")
             
-            # Headers
-            headers = {}
-            if self.token:
-                headers['PRIVATE-TOKEN'] = self.token
+            # Encode the project path for API
+            encoded_path = requests.utils.quote(project_path, safe='')
             
             # Fetch project details
-            project_url = f"{self.base_url}/projects/{encoded_path}"
-            response = requests.get(project_url, headers=headers)
+            project_data = self._get_project_details(encoded_path)
             
-            if response.status_code != 200:
-                print(f"Error fetching project: {response.status_code}")
-                return None
-            
-            project_data = response.json()
-            
-            # Fetch repository tree (file structure)
-            tree_url = f"{self.base_url}/projects/{encoded_path}/repository/tree"
-            tree_response = requests.get(tree_url, headers=headers, params={'per_page': 100})
-            tree_data = tree_response.json() if tree_response.status_code == 200 else []
-            
-            # Fetch README if exists
-            readme_content = self._fetch_readme(encoded_path, headers)
-            
-            # Fetch recent commits
-            commits_url = f"{self.base_url}/projects/{encoded_path}/repository/commits"
-            commits_response = requests.get(commits_url, headers=headers, params={'per_page': 10})
-            commits_data = commits_response.json() if commits_response.status_code == 200 else []
-            
-            # Fetch languages
-            languages_url = f"{self.base_url}/projects/{encoded_path}/languages"
-            languages_response = requests.get(languages_url, headers=headers)
-            languages_data = languages_response.json() if languages_response.status_code == 200 else {}
+            # Fetch additional data
+            file_tree = self._get_file_tree(encoded_path)
+            languages = self._get_languages(encoded_path)
+            readme_content = self._get_readme(encoded_path)
+            commits = self._get_recent_commits(encoded_path)
             
             return {
                 'name': project_data.get('name'),
                 'description': project_data.get('description', 'No description provided'),
-                'language': project_data.get('default_branch', 'main'),
+                'web_url': project_data.get('web_url'),
+                'default_branch': project_data.get('default_branch', 'main'),
                 'star_count': project_data.get('star_count', 0),
                 'forks_count': project_data.get('forks_count', 0),
-                'web_url': project_data.get('web_url'),
+                'languages': languages,
+                'file_tree': file_tree,
+                'readme_content': readme_content,
+                'recent_commits': commits,
                 'created_at': project_data.get('created_at'),
-                'last_activity_at': project_data.get('last_activity_at'),
-                'readme': readme_content,
-                'file_structure': tree_data,
-                'recent_commits': commits_data,
-                'languages': languages_data,
-                'topics': project_data.get('topics', []),
-                'visibility': project_data.get('visibility', 'private')
+                'last_activity_at': project_data.get('last_activity_at')
             }
             
         except Exception as e:
-            print(f"Error in fetch_repository_data: {str(e)}")
+            print(f"Error fetching repository data: {str(e)}")
+            raise
+    
+    def _extract_project_path(self, repo_url: str) -> Optional[str]:
+        """Extract project path from GitLab URL"""
+        try:
+            # Remove trailing slashes and .git
+            url = repo_url.rstrip('/').replace('.git', '')
+            
+            # Handle different URL formats
+            if 'gitlab.com/' in url:
+                # Extract path after gitlab.com/
+                path = url.split('gitlab.com/')[-1]
+                return path
+            
+            return None
+        except Exception as e:
+            print(f"Error extracting project path: {str(e)}")
             return None
     
-    def _fetch_readme(self, encoded_path, headers):
-        """Fetch README content"""
+    def _get_project_details(self, encoded_path: str) -> Dict:
+        """Get project details from GitLab API"""
+        url = f"{self.base_url}/projects/{encoded_path}"
+        response = requests.get(url, headers=self.headers, timeout=10)
+        response.raise_for_status()
+        return response.json()
+    
+    def _get_file_tree(self, encoded_path: str, max_depth: int = 3) -> List[Dict]:
+        """Get repository file tree"""
         try:
-            readme_files = ['README.md', 'README.MD', 'readme.md', 'Readme.md']
+            url = f"{self.base_url}/projects/{encoded_path}/repository/tree"
+            params = {
+                'recursive': True,
+                'per_page': 100
+            }
+            response = requests.get(url, headers=self.headers, params=params, timeout=10)
+            response.raise_for_status()
             
-            for readme_file in readme_files:
-                file_url = f"{self.base_url}/projects/{encoded_path}/repository/files/{quote(readme_file, safe='')}/raw"
-                response = requests.get(file_url, headers=headers, params={'ref': 'main'})
-                
-                if response.status_code == 200:
-                    return response.text
-                
-                # Try master branch
-                response = requests.get(file_url, headers=headers, params={'ref': 'master'})
-                if response.status_code == 200:
-                    return response.text
+            files = response.json()
+            
+            # Sort files: directories first, then by path
+            sorted_files = sorted(files, key=lambda x: (x.get('type') != 'tree', x.get('path', '')))
+            
+            return sorted_files[:100]  # Limit to 100 files
+            
+        except Exception as e:
+            print(f"Error fetching file tree: {str(e)}")
+            return []
+    
+    def _get_languages(self, encoded_path: str) -> Dict:
+        """Get programming languages used in the repository"""
+        try:
+            url = f"{self.base_url}/projects/{encoded_path}/languages"
+            response = requests.get(url, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            print(f"Error fetching languages: {str(e)}")
+            return {}
+    
+    def _get_readme(self, encoded_path: str) -> str:
+        """Get README content"""
+        try:
+            # Try different README file names
+            readme_files = ['README.md', 'README.MD', 'readme.md', 'Readme.md', 'README']
+            
+            for readme_name in readme_files:
+                try:
+                    url = f"{self.base_url}/projects/{encoded_path}/repository/files/{readme_name}/raw"
+                    response = requests.get(url, headers=self.headers, timeout=10)
+                    
+                    if response.status_code == 200:
+                        return response.text
+                except:
+                    continue
             
             return "No README found"
             
         except Exception as e:
             print(f"Error fetching README: {str(e)}")
-            return "Error fetching README"
+            return "Unable to fetch README"
+    
+    def _get_recent_commits(self, encoded_path: str, limit: int = 10) -> List[Dict]:
+        """Get recent commits"""
+        try:
+            url = f"{self.base_url}/projects/{encoded_path}/repository/commits"
+            params = {'per_page': limit}
+            response = requests.get(url, headers=self.headers, params=params, timeout=10)
+            response.raise_for_status()
+            
+            commits = response.json()
+            
+            # Extract relevant commit info
+            return [
+                {
+                    'id': commit.get('id'),
+                    'title': commit.get('title'),
+                    'author': commit.get('author_name'),
+                    'date': commit.get('created_at'),
+                    'message': commit.get('message', '')[:200]  # First 200 chars
+                }
+                for commit in commits
+            ]
+            
+        except Exception as e:
+            print(f"Error fetching commits: {str(e)}")
+            return []
