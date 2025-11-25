@@ -11,12 +11,14 @@ function App() {
   const [error, setError] = useState(null)
 
   const handleAnalyze = async (repoUrl) => {
+    console.log('Starting analysis for:', repoUrl)
     setLoading(true)
     setError(null)
     setResults(null)
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+      console.log('API URL:', apiUrl)
       const response = await fetch(`${apiUrl}/api/analyze`, {
         method: 'POST',
         headers: {
@@ -25,16 +27,18 @@ function App() {
         body: JSON.stringify({ repo_url: repoUrl }),
       })
 
+      console.log('Response status:', response.status)
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Analysis failed')
       }
 
       const data = await response.json()
+      console.log('Analysis complete:', data)
       setResults(data)
     } catch (err) {
-      setError(err.message)
       console.error('Analysis error:', err)
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -42,12 +46,11 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
       <header className="border-b border-gray-800 bg-gray-900 bg-opacity-50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <GitlabIcon className="w-8 h-8 text-gitlab-orange" />
-            <h1 className="text-2xl font-bold gradient-text"><a href="https://repoinsight-ai-frontend.onrender.com/">RepoInsight AI</a></h1>
+            <h1 className="text-2xl font-bold gradient-text">RepoInsight AI</h1>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <Sparkles className="w-4 h-4" />
@@ -56,20 +59,15 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
-        {/* Hero Section */}
         {!results && !loading && <Hero />}
-
-        {/* Analysis Form */}
+        
         <div className="max-w-4xl mx-auto mb-12">
           <AnalysisForm onAnalyze={handleAnalyze} disabled={loading} />
         </div>
 
-        {/* Loading State */}
         {loading && <LoadingSpinner />}
 
-        {/* Error State */}
         {error && (
           <div className="max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="card bg-red-900 bg-opacity-30 border-red-700">
@@ -82,11 +80,9 @@ function App() {
           </div>
         )}
 
-        {/* Results Display */}
         {results && !loading && <ResultsDisplay results={results} />}
       </main>
 
-      {/* Footer */}
       <footer className="border-t border-gray-800 bg-gray-900 bg-opacity-50 mt-20">
         <div className="container mx-auto px-4 py-8 text-center text-gray-400">
           <p className="mb-2">Built for GitLab Hackathon Challenge 2025</p>
