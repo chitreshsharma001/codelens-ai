@@ -85,7 +85,7 @@ Developers spend countless hours:
 ### Backend
 - **Python 3.11** - Runtime
 - **Flask** - Web framework
-- **Anthropic SDK** - Claude AI integration
+- **Gemini** - AI Integration 
 - **Requests** - HTTP client
 
 ### DevOps
@@ -376,6 +376,6 @@ For issues or questions:
 
 **Built with ❤️ using GitLab, Gemini AI, React, and Python by [Team ZenYukti](https://zenyukti.in)**
 
-[Live Demo](https://repoinsight-ai-frontend.onrender.com/) | [Video Demo](#)
+[Live Demo](https://repoinsight-ai-frontend.onrender.com/) | [Video Demo](https://drive.google.com/file/d/1pgA1s_W53MWwVN-zvWXuvQvZ69xwHbLn/view?usp=sharing)
 
 </div>

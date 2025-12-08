@@ -9,9 +9,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Create services directory if it doesn't exist
-RUN mkdir -p services
-
 # Expose port
 EXPOSE 5000
 

@@ -65,7 +65,7 @@ React 18 + Vite
 Python Flask
 ├── RESTful API design
 ├── GitLab API integration
-├── Claude AI integration
+├── Gemini AI integration
 └── Error handling & logging
 ```
 
@@ -241,7 +241,7 @@ docker-compose up --build
 - Demonstrates DevSecOps practices
 
 ### 3. AI-Native Solution ✅
-- Leverages cutting-edge AI (Claude Sonnet 4)
+- Leverages cutting-edge AI (Gemini AI)
 - Practical AI application
 - Scalable and adaptable
 
@@ -300,7 +300,7 @@ docker-compose up --build
 
 - **GitLab Repository**: [https://gitlab.com/ayushHardeniya/repoinsight-ai]
 - **Live Demo**: [https://repoinsight-ai-frontend.onrender.com]
-- **Demo Video**: []
+- **Demo Video**: [https://drive.google.com/file/d/1pgA1s_W53MWwVN-zvWXuvQvZ69xwHbLn/view?usp=sharing]
 - **Email**: [support@zenyukti.in]
 
 ---
