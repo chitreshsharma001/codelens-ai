@@ -28,7 +28,7 @@ Developers spend countless hours:
 ## ✨ Features
 
 ### 🤖 **AI-Powered Analysis**
-- Deep code structure analysis using Claude AI
+- Deep code structure analysis using Gemini AI
 - Technology stack identification
 - Code quality assessment
 - Complexity scoring
@@ -69,7 +69,7 @@ Developers spend countless hours:
      │       │
      │       └──────────► GitLab API
      │
-     └──────────────────► Gemini AI (Anthropic)
+     └──────────────────► Gemini AI (Google)
 ```
 
 ---
@@ -113,7 +113,7 @@ cd repoinsight-ai
 ### 2️⃣ Setup Environment Variables
 ```bash
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# Edit .env and add your GEMINI_API_KEY
 ```
 
 ### 3️⃣ Run with Docker Compose (Easiest)

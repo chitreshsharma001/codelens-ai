@@ -23,7 +23,7 @@ Modern software development faces a critical documentation crisis:
 ## ⚡ Key Features
 
 ### 1. AI-Powered Repository Analysis
-- **Technology**: Claude Sonnet 4 (Anthropic)
+- **Technology**: Google Gemini AI
 - **Capability**: Analyzes code structure, identifies patterns, assesses quality
 - **Output**: Comprehensive project overview, tech stack identification, complexity scoring
 
@@ -77,18 +77,18 @@ Python Flask
 
 ### AI Integration
 ```
-Anthropic Claude Sonnet 4
+Google Gemini AI
 ├── Code analysis
 ├── Documentation generation
 ├── Suggestion engine
 └── Natural language processing
 ```
 
-**Why Claude?**
-- State-of-the-art language understanding
-- Excellent code analysis capabilities
-- Reliable JSON output for structured data
-- Long context window for large codebases
+**Why Gemini?**
+- Advanced language understanding capabilities
+- Excellent code analysis and generation
+- Reliable structured output for data
+- Fast and efficient processing
 
 ---
 
@@ -309,7 +309,7 @@ docker-compose up --build
 
 Special thanks to:
 - **GitLab** for the powerful DevSecOps platform
-- **Anthropic** for Claude AI API access
+- **Google** for Gemini AI API access
 - **E-Cell IIT Bombay** for organizing i-Hack 2025
 - **Open Source Community** for the amazing tools and libraries
 - **[ZenYukti](https://zenyukti.in)** for good developers to help across the project.

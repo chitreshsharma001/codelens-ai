@@ -10,7 +10,7 @@ Before starting, you need:
 
 ### Required Accounts (All FREE)
 - [ ] GitLab account - [Sign up](https://gitlab.com)
-- [ ] Anthropic Claude API key - [Get here](https://console.anthropic.com/)
+- [ ] Google Gemini API key - [Get here](https://aistudio.google.com/app/apikey)
 - [ ] Render.com account - [Sign up](https://render.com) (for hosting)
 
 ### Optional
@@ -21,13 +21,13 @@ Before starting, you need:
 
 ## 🎯 Step 1: Get Your API Key
 
-### Anthropic Claude API ($5 free credit)
+### Google Gemini API (Free tier available)
 
-1. Go to https://console.anthropic.com/
-2. Sign up with email
-3. Verify your email
-4. Go to "API Keys" section
-5. Click "Create Key"
+1. Go to https://aistudio.google.com/app/apikey
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Choose "Create API key in new project" or select existing project
+5. Copy your API key
 6. **Copy the key** - it looks like: `sk-ant-api03-xxxxx...`
 7. **Save it somewhere safe** - you'll need it later!
 
@@ -99,9 +99,9 @@ Now, copy each file I provided above into the correct location:
 
 1. In the root folder, rename `.env.example` to `.env`
 2. Open `.env` with a text editor
-3. Paste your Anthropic API key:
+3. Paste your Gemini API key:
    ```
-   ANTHROPIC_API_KEY=sk-ant-api03-your-actual-key-here
+   GEMINI_API_KEY=your-gemini-api-key-here
    ```
 4. Save the file
 
@@ -145,7 +145,7 @@ git push -u origin main
 
    | Key | Value | Protect | Mask |
    |-----|-------|---------|------|
-   | `ANTHROPIC_API_KEY` | Your API key | ✅ Yes | ✅ Yes |
+   | `GEMINI_API_KEY` | Your API key | ✅ Yes | ✅ Yes |
    | `GITLAB_TOKEN` | (leave empty) | ✅ Yes | ✅ Yes |
 
 5. Click **Add variable** for each
