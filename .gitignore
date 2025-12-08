@@ -34,3 +34,9 @@ Thumbs.db
 
 # Package locks (optional)
 package-lock.json
+
+# Test files
+test*.py
+quick_test.py
+test-*.json
+test_result.txt
