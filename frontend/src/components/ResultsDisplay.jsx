@@ -102,11 +102,7 @@ export default function ResultsDisplay({ results }) {
               <div className="space-y-4">
                 <div>
                   <h4 className="font-semibold text-gray-300 mb-2">Summary</h4>
-                  <p className="text-gray-400 leading-relaxed">{analysis.overview?.summary}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-300 mb-2">Purpose</h4>
-                  <p className="text-gray-400">{analysis.overview?.purpose}</p>
+                  <p className="text-gray-400 leading-relaxed">{analysis.overview?.summary?.substring(0, 200)}...</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-gray-300 mb-2">Project Type</h4>
@@ -116,7 +112,7 @@ export default function ResultsDisplay({ results }) {
                   <div>
                     <h4 className="font-semibold text-gray-300 mb-2">Tech Stack</h4>
                     <div className="flex flex-wrap gap-2">
-                      {analysis.overview.tech_stack.map((tech, idx) => (
+                      {analysis.overview.tech_stack.slice(0, 8).map((tech, idx) => (
                         <span key={idx} className="px-3 py-1 bg-gray-700 rounded-full text-sm text-gray-300">
                           {tech}
                         </span>
@@ -140,32 +136,6 @@ export default function ResultsDisplay({ results }) {
                     style={{ width: `${(analysis.code_quality?.score || 0) * 10}%` }}
                   ></div>
                 </div>
-                {analysis.code_quality?.assessment && (
-                  <div>
-                    <h4 className="font-semibold text-gray-300 mb-2">Assessment</h4>
-                    <p className="text-gray-400 leading-relaxed whitespace-pre-line">{analysis.code_quality.assessment}</p>
-                  </div>
-                )}
-                {analysis.code_quality?.strengths && (
-                  <div>
-                    <h4 className="font-semibold text-green-400 mb-2">✅ Strengths</h4>
-                    <ul className="list-disc list-inside space-y-1 text-gray-400">
-                      {analysis.code_quality.strengths.map((strength, idx) => (
-                        <li key={idx}>{strength}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {analysis.code_quality?.weaknesses && (
-                  <div>
-                    <h4 className="font-semibold text-red-400 mb-2">⚠️ Weaknesses</h4>
-                    <ul className="list-disc list-inside space-y-1 text-gray-400">
-                      {analysis.code_quality.weaknesses.map((weakness, idx) => (
-                        <li key={idx}>{weakness}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -173,12 +143,15 @@ export default function ResultsDisplay({ results }) {
               <div className="grid md:grid-cols-2 gap-6">
                 {analysis.code_quality?.strengths && (
                   <div className="card">
-                    <h3 className="text-xl font-bold mb-4 text-green-400">Strengths</h3>
-                    <ul className="space-y-2">
-                      {analysis.code_quality.strengths.map((strength, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-300">{strength}</span>
+                    <h3 className="text-lg font-bold mb-3 text-green-400 flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5" />
+                      Strengths
+                    </h3>
+                    <ul className="space-y-2.5">
+                      {analysis.code_quality.strengths.slice(0, 5).map((strength, i) => (
+                        <li key={i} className="flex items-start gap-2.5">
+                          <span className="text-green-400 text-lg leading-none">•</span>
+                          <span className="text-base text-gray-300 leading-relaxed">{strength}</span>
                         </li>
                       ))}
                     </ul>
@@ -187,12 +160,15 @@ export default function ResultsDisplay({ results }) {
 
                 {analysis.code_quality?.weaknesses && (
                   <div className="card">
-                    <h3 className="text-xl font-bold mb-4 text-yellow-400">Areas for Improvement</h3>
-                    <ul className="space-y-2">
-                      {analysis.code_quality.weaknesses.map((area, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <AlertCircle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-300">{area}</span>
+                    <h3 className="text-lg font-bold mb-3 text-yellow-400 flex items-center gap-2">
+                      <AlertCircle className="w-5 h-5" />
+                      Areas for Improvement
+                    </h3>
+                    <ul className="space-y-2.5">
+                      {analysis.code_quality.weaknesses.slice(0, 5).map((area, i) => (
+                        <li key={i} className="flex items-start gap-2.5">
+                          <span className="text-yellow-400 text-lg leading-none">•</span>
+                          <span className="text-base text-gray-300 leading-relaxed">{area}</span>
                         </li>
                       ))}
                     </ul>
@@ -241,14 +217,14 @@ export default function ResultsDisplay({ results }) {
                   {analysis.complexity?.explanation && (
                     <div>
                       <h4 className="font-semibold text-gray-300 mb-2">Explanation</h4>
-                      <p className="text-gray-400 leading-relaxed whitespace-pre-line">{analysis.complexity.explanation}</p>
+                      <p className="text-gray-400 leading-relaxed">{analysis.complexity.explanation.substring(0, 150)}...</p>
                     </div>
                   )}
                   {analysis.complexity?.factors && (
                     <div>
                       <h4 className="font-semibold text-gray-300 mb-2">Complexity Factors</h4>
                       <ul className="list-disc list-inside space-y-1 text-gray-400">
-                        {analysis.complexity.factors.map((factor, idx) => (
+                        {analysis.complexity.factors.slice(0, 3).map((factor, idx) => (
                           <li key={idx}>{factor}</li>
                         ))}
                       </ul>
@@ -263,69 +239,112 @@ export default function ResultsDisplay({ results }) {
         {/* Analysis Tab */}
         {activeTab === 'analysis' && analysis && (
           <div className="space-y-6">
+            {/* Architecture Card */}
             <div className="card">
-              <h3 className="text-2xl font-bold mb-6 gradient-text">Architecture Insights</h3>
-              <div className="space-y-4">
-                {analysis.architecture?.pattern && (
-                  <div>
-                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Architecture Pattern</h4>
-                    <span className="inline-block px-4 py-2 bg-purple-900/30 border border-purple-500 rounded-lg text-purple-300">
-                      {analysis.architecture.pattern}
-                    </span>
-                  </div>
-                )}
+              <h3 className="text-xl font-bold mb-4 gradient-text flex items-center gap-2">
+                <Code className="w-5 h-5" />
+                Architecture
+              </h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  {analysis.architecture?.pattern && (
+                    <div>
+                      <div className="text-sm font-semibold text-gray-400 mb-2">PATTERN</div>
+                      <span className="inline-block px-4 py-2 bg-purple-900/30 border border-purple-500 rounded-lg text-base text-purple-300">
+                        {analysis.architecture.pattern}
+                      </span>
+                    </div>
+                  )}
+                  {analysis.architecture?.components && analysis.architecture.components.length > 0 && (
+                    <div>
+                      <div className="text-sm font-semibold text-gray-400 mb-3">KEY COMPONENTS</div>
+                      <div className="space-y-3">
+                        {analysis.architecture.components.slice(0, 6).map((component, idx) => (
+                          <div key={idx} className="flex items-start gap-3">
+                            <CheckCircle className="w-4 h-4 text-purple-400 mt-1 flex-shrink-0" />
+                            <span className="text-base text-gray-300 leading-relaxed">{component}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 {analysis.architecture?.structure && (
                   <div>
-                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Structure</h4>
-                    <p className="text-gray-300 leading-relaxed whitespace-pre-line">{analysis.architecture.structure}</p>
+                    <div className="text-sm font-semibold text-gray-400 mb-3">OVERVIEW</div>
+                    <p className="text-base text-gray-300 leading-relaxed">
+                      {analysis.architecture.structure}
+                    </p>
                   </div>
-                )}
-                {analysis.architecture?.components && analysis.architecture.components.length > 0 && (
-                  <div>
-                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Key Components</h4>
-                    <ul className="list-disc list-inside space-y-1 text-gray-300">
-                      {analysis.architecture.components.map((component, idx) => (
-                        <li key={idx}>{component}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {!analysis.architecture?.pattern && !analysis.architecture?.structure && !analysis.architecture?.components && (
-                  <p className="text-gray-400">Architecture analysis unavailable</p>
                 )}
               </div>
             </div>
 
-            <div className="card">
-              <h3 className="text-2xl font-bold mb-6 gradient-text">Complexity Metrics</h3>
-              <div className="space-y-4">
-                {analysis.complexity?.score && (
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-lg font-semibold text-gray-300">Complexity Score</span>
-                    <span className="text-4xl font-bold text-blue-400">{analysis.complexity.score}/10</span>
+            {/* Metrics Grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Quality Card */}
+              <div className="card">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 bg-green-900/30 rounded-lg">
+                    <CheckCircle className="w-6 h-6 text-green-400" />
                   </div>
+                  <div>
+                    <div className="text-sm text-gray-400">Code Quality</div>
+                    <div className="text-3xl font-bold text-green-400">{analysis.code_quality?.score || 0}<span className="text-lg text-gray-500">/10</span></div>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-2 mb-3">
+                  <div 
+                    className="bg-gradient-to-r from-green-500 to-green-400 h-2 rounded-full transition-all"
+                    style={{ width: `${(analysis.code_quality?.score || 0) * 10}%` }}
+                  ></div>
+                </div>
+                {analysis.code_quality?.assessment && (
+                  <p className="text-sm text-gray-300 leading-relaxed mt-3 pt-3 border-t border-gray-700">
+                    {analysis.code_quality.assessment}
+                  </p>
                 )}
+              </div>
+
+              {/* Complexity Card */}
+              <div className="card">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 bg-blue-900/30 rounded-lg">
+                    <TrendingUp className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-400">Complexity</div>
+                    <div className="text-3xl font-bold text-blue-400">{analysis.complexity?.score || 0}<span className="text-lg text-gray-500">/10</span></div>
+                  </div>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-2 mb-3">
+                  <div 
+                    className="bg-gradient-to-r from-blue-500 to-blue-400 h-2 rounded-full transition-all"
+                    style={{ width: `${(analysis.complexity?.score || 0) * 10}%` }}
+                  ></div>
+                </div>
                 {analysis.complexity?.explanation && (
-                  <div>
-                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Explanation</h4>
-                    <p className="text-gray-300 leading-relaxed whitespace-pre-line">{analysis.complexity.explanation}</p>
-                  </div>
-                )}
-                {analysis.complexity?.factors && analysis.complexity.factors.length > 0 && (
-                  <div>
-                    <h4 className="text-lg font-semibold mb-2 text-gitlab-orange">Complexity Factors</h4>
-                    <ul className="list-disc list-inside space-y-2 text-gray-300">
-                      {analysis.complexity.factors.map((factor, idx) => (
-                        <li key={idx}>{factor}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {!analysis.complexity?.score && !analysis.complexity?.explanation && !analysis.complexity?.factors && (
-                  <p className="text-gray-400">Complexity analysis unavailable</p>
+                  <p className="text-sm text-gray-300 leading-relaxed mt-3 pt-3 border-t border-gray-700">
+                    {analysis.complexity.explanation}
+                  </p>
                 )}
               </div>
             </div>
+
+            {/* Complexity Factors */}
+            {analysis.complexity?.factors && analysis.complexity.factors.length > 0 && (
+              <div className="card">
+                <h4 className="text-lg font-bold mb-4 text-blue-400">Complexity Factors</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {analysis.complexity.factors.slice(0, 6).map((factor, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-4 bg-gray-800/50 rounded-lg">
+                      <AlertCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                      <span className="text-base text-gray-300 leading-relaxed">{factor}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

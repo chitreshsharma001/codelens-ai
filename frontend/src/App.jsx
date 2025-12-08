@@ -71,11 +71,25 @@ function App() {
         {error && (
           <div className="max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="card bg-red-900 bg-opacity-30 border-red-700">
-              <h3 className="text-xl font-bold text-red-400 mb-2">Analysis Failed</h3>
-              <p className="text-red-300">{error}</p>
-              <p className="text-sm text-gray-400 mt-4">
-                Tips: Make sure the repository is public or you've set GITLAB_TOKEN
-              </p>
+              <h3 className="text-xl font-bold text-red-400 mb-3">❌ Analysis Failed</h3>
+              <p className="text-red-300 mb-4">{error}</p>
+              
+              <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4 space-y-2">
+                <p className="text-sm font-semibold text-gray-300">💡 Troubleshooting Tips:</p>
+                <ul className="text-sm text-gray-400 space-y-1 ml-4">
+                  <li>• Verify the repository URL is correct and public</li>
+                  <li>• Check if the repository exists on GitLab (not GitHub)</li>
+                  <li>• For private repos, set GITLAB_TOKEN in environment</li>
+                  <li>• Try the demo button to test with a working example</li>
+                </ul>
+              </div>
+              
+              <button
+                onClick={() => setError(null)}
+                className="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm transition-colors"
+              >
+                Dismiss
+              </button>
             </div>
           </div>
         )}
