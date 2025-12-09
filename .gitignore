@@ -28,6 +28,9 @@ build/
 *.swp
 *.swo
 
+#documentation
+/docs/
+
 # OS
 .DS_Store
 Thumbs.db
