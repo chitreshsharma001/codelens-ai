@@ -30,6 +30,10 @@ function App() {
       console.log('Response status:', response.status)
       if (!response.ok) {
         const errorData = await response.json()
+        // If it's a structured error (rate limit, etc.), pass the whole object
+        if (errorData.tips || errorData.message) {
+          throw errorData
+        }
         throw new Error(errorData.error || 'Analysis failed')
       }
 
@@ -38,7 +42,8 @@ function App() {
       setResults(data)
     } catch (err) {
       console.error('Analysis error:', err)
-      setError(err.message)
+      // Pass structured error or message string
+      setError(err.error ? err : err.message)
     } finally {
       setLoading(false)
     }
@@ -71,16 +76,26 @@ function App() {
         {error && (
           <div className="max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="card bg-red-900 bg-opacity-30 border-red-700">
-              <h3 className="text-xl font-bold text-red-400 mb-3">❌ Analysis Failed</h3>
-              <p className="text-red-300 mb-4">{error}</p>
+              <h3 className="text-xl font-bold text-red-400 mb-3">
+                {typeof error === 'object' && error.error === 'GitLab rate limit exceeded' ? '⏱️ Rate Limit Reached' : '❌ Analysis Failed'}
+              </h3>
+              <p className="text-red-300 mb-4">
+                {typeof error === 'object' ? error.message || error.error : error}
+              </p>
               
               <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4 space-y-2">
-                <p className="text-sm font-semibold text-gray-300">💡 Troubleshooting Tips:</p>
+                <p className="text-sm font-semibold text-gray-300">💡 What to do:</p>
                 <ul className="text-sm text-gray-400 space-y-1 ml-4">
-                  <li>• Verify the repository URL is correct and public</li>
-                  <li>• Check if the repository exists on GitLab (not GitHub)</li>
-                  <li>• For private repos, set GITLAB_TOKEN in environment</li>
-                  <li>• Try the demo button to test with a working example</li>
+                  {typeof error === 'object' && error.tips ? (
+                    error.tips.map((tip, idx) => <li key={idx}>• {tip}</li>)
+                  ) : (
+                    <>
+                      <li>• Verify the repository URL is correct and public</li>
+                      <li>• Check if the repository exists on GitLab (not GitHub)</li>
+                      <li>• For private repos, set GITLAB_TOKEN in environment</li>
+                      <li>• Try the demo button to test with a working example</li>
+                    </>
+                  )}
                 </ul>
               </div>
               

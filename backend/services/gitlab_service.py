@@ -73,6 +73,17 @@ class GitLabService:
         """Get project details from GitLab API"""
         url = f"{self.base_url}/projects/{encoded_path}"
         response = requests.get(url, headers=self.headers, timeout=10)
+        
+        # Log rate limit info if available
+        if 'RateLimit-Remaining' in response.headers:
+            print(f"GitLab API - Remaining: {response.headers.get('RateLimit-Remaining')}/{response.headers.get('RateLimit-Limit')}")
+        
+        if response.status_code == 429:
+            reset_time = response.headers.get('RateLimit-Reset', 'unknown')
+            raise requests.exceptions.HTTPError(
+                f"GitLab rate limit exceeded. Please wait or add a GITLAB_API_TOKEN to increase limits. Resets at: {reset_time}"
+            )
+        
         response.raise_for_status()
         return response.json()
     

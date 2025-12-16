@@ -65,6 +65,24 @@ def analyze_repository():
             'documentation': documentation
         })
         
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP Error: {str(e)}")
+        error_msg = str(e)
+        
+        # Friendly rate limit message
+        if '429' in error_msg or 'rate limit' in error_msg.lower():
+            return jsonify({
+                'error': 'GitLab rate limit exceeded',
+                'message': 'Too many requests to GitLab API. Try again in a few minutes or add a GITLAB_API_TOKEN in backend/.env for higher limits.',
+                'tips': [
+                    'Use the "Try Demo" button to test with a cached example',
+                    'Wait 1-2 minutes before retrying',
+                    'Add GITLAB_API_TOKEN to backend/.env for authenticated requests (higher limits)'
+                ]
+            }), 429
+        
+        return jsonify({'error': error_msg}), 500
+        
     except Exception as e:
         print(f"Error: {str(e)}")
         return jsonify({'error': str(e)}), 500
