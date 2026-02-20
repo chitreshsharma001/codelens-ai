@@ -1,4 +1,4 @@
-# 🚀 RepoInsight AI
+# RepoInsight AI
 
 ### Check Live Project
 [Click Here](https://repoinsight-ai-frontend.onrender.com/)
@@ -13,46 +13,46 @@ Built for **GitLab Hackathon Challenge 2025** | i-Hack, E-Summit IIT Bombay | By
 
 ---
 
-## 📋 Problem Statement
+## Problem Statement
 
 Developers spend countless hours:
-- 📝 Writing and maintaining documentation
-- 🔍 Analyzing code quality and structure
-- 💡 Identifying areas for improvement
-- 🏗️ Understanding project architecture
+- Writing and maintaining documentation
+- Analyzing code quality and structure
+- Identifying areas for improvement
+- Understanding project architecture
 
 **RepoInsight AI** solves this by providing instant, AI-powered analysis of any GitLab repository.
 
 ---
 
-## ✨ Features
+## Features
 
-### 🤖 **AI-Powered Analysis**
+### **AI-Powered Analysis**
 - Deep code structure analysis using Gemini AI
 - Technology stack identification
 - Code quality assessment
 - Complexity scoring
 
-### 📚 **Auto Documentation**
+### **Auto Documentation**
 - Comprehensive README generation
 - API documentation
 - Architecture overview
 - Installation & usage guides
 
-### 💡 **Smart Suggestions**
+### **Smart Suggestions**
 - Actionable improvement recommendations
 - Security & testing suggestions
 - CI/CD optimization tips
 - Best practices implementation
 
-### ⚡ **Lightning Fast**
+### **Lightning Fast**
 - Results in 15-30 seconds
 - Real-time processing
 - Beautiful, intuitive UI
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────┐
@@ -74,7 +74,7 @@ Developers spend countless hours:
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Frontend
 - **React 18** - UI Framework
@@ -96,7 +96,7 @@ Developers spend countless hours:
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+
@@ -104,19 +104,19 @@ Developers spend countless hours:
 - Docker & Docker Compose (optional)
 - Gemini API Key ([Get one here](https://aistudio.google.com/app/api-keys))
 
-### 1️⃣ Clone Repository
+### 1.Clone Repository
 ```bash
 git clone https://gitlab.com/your-username/repoinsight-ai.git
 cd repoinsight-ai
 ```
 
-### 2️⃣ Setup Environment Variables
+### 2️.Setup Environment Variables
 ```bash
 cp .env.example .env
 # Edit .env and add your GEMINI_API_KEY
 ```
 
-### 3️⃣ Run with Docker Compose (Easiest)
+### 3️.Run with Docker Compose (Easiest)
 ```bash
 docker-compose up --build
 ```
@@ -125,7 +125,7 @@ Visit:
 - Frontend: http://localhost:3000
 - Backend: http://localhost:5000
 
-### 4️⃣ Manual Setup
+### 4️.Manual Setup
 
 #### Backend
 ```bash
@@ -145,7 +145,7 @@ npm run dev
 
 ---
 
-## 🏗️ Development Timeline
+## Development Timeline
 
 ### Phase 1: Local Development (October - Mid November)
 **Duration:** ~3-4 weeks  
@@ -185,11 +185,11 @@ then invest time in proper deployment and DevOps.
 **Focus:** Showcase GitLab platform capabilities for hackathon
 
 Enhancements for GitLab Hackathon Challenge:
-- 🔄 Comprehensive CI/CD pipeline
-- 🔒 Security scanning (SAST, Dependency, Secret Detection)
-- 📦 Container Registry integration
-- 📊 Project management (Issues, Milestones)
-- 📝 Documentation and demo materials
+- Comprehensive CI/CD pipeline
+- Security scanning (SAST, Dependency, Secret Detection)
+- Container Registry integration
+- Project management (Issues, Milestones)
+- Documentation and demo materials
 
 **Why separate phases?**
 We wanted a working product first (MVP mindset), then added 
@@ -197,7 +197,7 @@ enterprise-grade DevSecOps practices using GitLab's native features.
 
 ---
 
-## 💡 Development Approach
+## Development Approach
 
 **"Build → Deploy → Enhance"**
 
@@ -214,7 +214,7 @@ This approach let us:
 
 ---
 
-## 📊 GitLab Features Utilized
+## GitLab Features Utilized
 
 ### ✅ DevSecOps Platform
 1. **GitLab CI/CD**
@@ -238,7 +238,7 @@ This approach let us:
 
 ---
 
-## 🎯 Usage
+## Usage
 
 1. **Enter Repository URL**
    - Paste any public GitLab repository URL
@@ -257,19 +257,7 @@ This approach let us:
 
 ---
 
-## 🎬 Demo Video
-
-[Link to demo video - Max 2.5 minutes]
-
-### Video Highlights:
-- Problem statement (0:00-0:30)
-- Solution demo (0:30-1:40)
-- GitLab integration (1:40-2:10)
-- Impact & conclusion (2:10-2:30)
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 repoinsight-ai/
@@ -295,7 +283,7 @@ repoinsight-ai/
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 ### Option 1: GitLab + Render (Free)
 1. Push code to GitLab
@@ -312,25 +300,9 @@ repoinsight-ai/
 
 ---
 
-## 🏆 Hackathon Submission
+## Contributing
 
-### ✅ Submission Checklist
-- [x] Public GitLab repository
-- [x] Complete source code
-- [x] Working demo (deployed)
-- [x] Demo video (< 2.5 mins)
-- [x] Documentation
-- [x] GitLab CI/CD configured
-
-### 📄 Key Documents
-- **README.md** - This file
-- **Demo Video** - Linked above
-
----
-
-## 🤝 Contributing
-
-This is a hackathon project, but contributions are welcome!
+This is a team project but contributions are also welcome!
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -340,30 +312,24 @@ This is a hackathon project, but contributions are welcome!
 
 ---
 
-## 📝 License
+## License
 
 MIT License - feel free to use this project!
 
 ---
 
-## 👥 [Team ZenYukti](https://zenyukti.in)
-
-Built for GitLab Hackathon Challenge 2025
-
-- **Event**: i-Hack 2025, E-Summit
-- **Organizer**: E-Cell, IIT Bombay
-- **Track**: GitLab CodeForge
+[Team ZenYukti](https://zenyukti.in)
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **GitLab** - For the amazing DevSecOps platform
 - **Google AI Studio** - For providing free GEMINI_API_KEY 
 
 ---
 
-## 📞 Support
+## Support
 
 For issues or questions:
 - Create an issue in GitLab
