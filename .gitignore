@@ -31,14 +31,10 @@ build/
 #documentation
 /docs/
 
-# OS
-.DS_Store
-Thumbs.db
-
 # Package locks (optional)
 package-lock.json
 
-# Test files
+# Test files (lying in root locally)
 test*.py
 quick_test.py
 test-*.json
