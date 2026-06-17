@@ -216,7 +216,7 @@ This approach let us:
 
 ## GitLab Features Utilized
 
-### ✅ DevSecOps Platform
+### DevSecOps Platform
 1. **GitLab CI/CD**
    - Automated testing
    - Docker image building
@@ -285,30 +285,11 @@ repoinsight-ai/
 
 ## Deployment
 
-### Option 1: GitLab + Render (Free)
+### GitLab + Render (Free)
 1. Push code to GitLab
 2. Connect to Render.com
 3. Deploy backend & frontend separately
 4. Set environment variables
-
-### Option 2: GitLab + AWS (Using Hackathon Credits)
-1. Configure AWS credentials in GitLab CI/CD
-2. Push to `main` branch
-3. Pipeline auto-deploys to:
-   - Backend → EC2/ECS
-   - Frontend → S3 + CloudFront
-
----
-
-## Contributing
-
-This is a team project but contributions are also welcome!
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open merge request
 
 ---
 
