@@ -9,7 +9,6 @@
 [![Gemini AI](https://img.shields.io/badge/Gemini-8E75B2?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/docs)
 [![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 
-Built for **GitLab Hackathon Challenge 2025** | i-Hack, E-Summit IIT Bombay | By [Team ZenYukti](https://zenyukti.in)
 
 ---
 
@@ -145,58 +144,6 @@ npm run dev
 
 ---
 
-## Development Timeline
-
-### Phase 1: Local Development (October - Mid November)
-**Duration:** ~3-4 weeks  
-**Environment:** Local development on personal machine
-
-During this phase, we focused on rapid prototyping and core features:
-- Built Flask backend API locally
-- Developed React frontend with Vite
-- Integrated Google Gemini AI for analysis
-- Tested with localhost:5000 (backend) and localhost:3000 (frontend)
-- Iteratively refined features based on testing
-
-**Tech Stack Decisions:**
-- Backend: Python Flask (lightweight, easy to test locally)
-- Frontend: React + Vite (fast refresh, great DX)
-- AI: Google Gemini (free API, no credit card needed)
-- Database: JSON-based (simple for MVP)
-
-### Phase 2: GitLab Migration & Cloud Deployment (Nov 16-19)
-**Duration:** 3-4 days  
-**Focus:** Production deployment and version control
-
-Key activities:
-- ✅ Uploaded codebase to GitLab
-- ✅ Deployed backend to Render.com
-- ✅ Deployed frontend to Render.com  
-- ✅ Configured environment variables (API keys, URLs)
-- ✅ Connected frontend to production backend API
-- ✅ Tested end-to-end in production
-
-**Why this sequence?**
-This is a common startup approach: build locally until it works, 
-then invest time in proper deployment and DevOps.
-
-### Phase 3: GitLab DevSecOps Enhancement (Nov 20-22)
-**Duration:** 2-3 days  
-**Focus:** Showcase GitLab platform capabilities for hackathon
-
-Enhancements for GitLab Hackathon Challenge:
-- Comprehensive CI/CD pipeline
-- Security scanning (SAST, Dependency, Secret Detection)
-- Container Registry integration
-- Project management (Issues, Milestones)
-- Documentation and demo materials
-
-**Why separate phases?**
-We wanted a working product first (MVP mindset), then added 
-enterprise-grade DevSecOps practices using GitLab's native features.
-
----
-
 ## Development Approach
 
 **"Build → Deploy → Enhance"**
@@ -294,12 +241,7 @@ repoinsight-ai/
 ---
 
 ## License
-
-MIT License - feel free to use this project!
-
----
-
-[Team ZenYukti](https://zenyukti.in)
+feel free to use this project!
 
 ---
 
@@ -307,22 +249,4 @@ MIT License - feel free to use this project!
 
 - **GitLab** - For the amazing DevSecOps platform
 - **Google AI Studio** - For providing free GEMINI_API_KEY 
-
 ---
-
-## Support
-
-For issues or questions:
-- Create an issue in GitLab
-- Email: [support@zenyukti.in]
-- Website: [https://zenyukti.in]
-
----
-
-<div align="center">
-
-**Built with ❤️ using GitLab, Gemini AI, React, and Python by [Team ZenYukti](https://zenyukti.in)**
-
-[Live Demo](https://repoinsight-ai-frontend.onrender.com/) | [Video Demo](https://drive.google.com/file/d/1pgA1s_W53MWwVN-zvWXuvQvZ69xwHbLn/view?usp=sharing)
-
-</div>

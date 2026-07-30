@@ -1,6 +1,6 @@
 # Frontend README.md
 
-# RepoInsight AI Frontend
+# CodeLens AI Frontend
 
 This is the frontend part of the RepoInsight AI project, built using React and Vite. The frontend application serves as the user interface for interacting with the backend services.
 
@@ -10,7 +10,7 @@ To get started with the frontend application, follow these steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/repoinsight-ai.git
+   git clone https://github.com/yourusername/CodeLens-ai.git
    cd repoinsight-ai/frontend
    ```
 
