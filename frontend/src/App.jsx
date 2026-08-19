@@ -3,21 +3,21 @@ import Hero from './components/Hero'
 import AnalysisForm from './components/AnalysisForm'
 import ResultsDisplay from './components/ResultsDisplay'
 import LoadingSpinner from './components/LoadingSpinner'
-import { GitlabIcon, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 
 function App() {
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState(null)
   const [error, setError] = useState(null)
+  const [theme, setTheme] = useState('dark')
 
   const handleAnalyze = async (repoUrl) => {
     console.log('Starting analysis for:', repoUrl)
     setLoading(true)
     setError(null)
     setResults(null)
-
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://repoinsight-ai.onrender.com'
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://codelens-ai.onrender.com'
       console.log('API URL:', apiUrl)
       const response = await fetch(`${apiUrl}/api/analyze`, {
         method: 'POST',
@@ -26,47 +26,68 @@ function App() {
         },
         body: JSON.stringify({ repo_url: repoUrl }),
       })
-
       console.log('Response status:', response.status)
       if (!response.ok) {
         const errorData = await response.json()
-        // If it's a structured error (rate limit, etc.), pass the whole object
         if (errorData.tips || errorData.message) {
           throw errorData
         }
         throw new Error(errorData.error || 'Analysis failed')
       }
-
       const data = await response.json()
       console.log('Analysis complete:', data)
       setResults(data)
+
+      try {
+        const history = JSON.parse(localStorage.getItem('analysisHistory') || '[]')
+        history.unshift({
+          repoUrl,
+          data,
+          date: new Date().toISOString(),
+        })
+        localStorage.setItem('analysisHistory', JSON.stringify(history.slice(0, 10)))
+      } catch (historyErr) {
+        console.error('Could not save analysis to history:', historyErr)
+      }
+
     } catch (err) {
       console.error('Analysis error:', err)
-      // Pass structured error or message string
       setError(err.error ? err : err.message)
     } finally {
       setLoading(false)
     }
   }
 
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'))
+  }
+
   return (
-    <div className="min-h-screen">
+    <div className={`min-h-screen ${theme}`}>
       <header className="border-b border-gray-800 bg-gray-900 bg-opacity-50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <GitlabIcon className="w-8 h-8 text-gitlab-orange" />
-            <h1 className="text-2xl font-bold gradient-text">RepoInsight AI</h1>
+            <img src="/codelens-logo.png" alt="CodeLens AI" className="w-8 h-8" />
+            <h1 className="text-2xl font-bold gradient-text">CodeLens AI</h1>
           </div>
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            <Sparkles className="w-4 h-4" />
-            <span>Powered by Gemini AI</span>
+          <div className="flex items-center gap-4 text-sm text-gray-400">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              <span>Powered by Gemini AI</span>
+            </div>
+            <button
+              onClick={toggleTheme}
+              className="text-sm px-3 py-1 rounded-full border border-gray-700 hover:bg-gray-800 transition-colors"
+            >
+              {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+            </button>
           </div>
         </div>
       </header>
 
       <main className="container mx-auto px-4 py-12">
         {!results && !loading && <Hero />}
-        
+
         <div className="max-w-4xl mx-auto mb-12">
           <AnalysisForm onAnalyze={handleAnalyze} disabled={loading} />
         </div>
@@ -77,58 +98,28 @@ function App() {
           <div className="max-w-4xl mx-auto mb-12 animate-fade-in">
             <div className="card bg-red-900 bg-opacity-30 border-red-700">
               <h3 className="text-xl font-bold text-red-400 mb-3">
-                {typeof error === 'object' && error.error === 'GitLab rate limit exceeded' ? '⏱️ Rate Limit Reached' : '❌ Analysis Failed'}
+                {typeof error === 'object' && error.error === 'GitLab rate limit exceeded'
+                  ? '⏱️ Rate Limit Reached'
+                  : '⚠️ Error'}
               </h3>
-              <p className="text-red-300 mb-4">
-                {typeof error === 'object' ? error.message || error.error : error}
+              <p className="text-gray-300">
+                {typeof error === 'object' ? (error.message || error.error) : error}
               </p>
-              
-              <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4 space-y-2">
-                <p className="text-sm font-semibold text-gray-300">💡 What to do:</p>
-                <ul className="text-sm text-gray-400 space-y-1 ml-4">
-                  {typeof error === 'object' && error.tips ? (
-                    error.tips.map((tip, idx) => <li key={idx}>• {tip}</li>)
-                  ) : (
-                    <>
-                      <li>• Verify the repository URL is correct and public</li>
-                      <li>• Check if the repository exists on GitLab (not GitHub)</li>
-                      <li>• For private repos, set GITLAB_TOKEN in environment</li>
-                      <li>• Try the demo button to test with a working example</li>
-                    </>
-                  )}
+              {typeof error === 'object' && error.tips && (
+                <ul className="mt-3 list-disc list-inside text-sm text-gray-400 space-y-1">
+                  {error.tips.map((tip, i) => (
+                    <li key={i}>{tip}</li>
+                  ))}
                 </ul>
-              </div>
-              
-              <button
-                onClick={() => setError(null)}
-                className="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-sm transition-colors"
-              >
-                Dismiss
-              </button>
+              )}
             </div>
           </div>
         )}
 
-        {results && !loading && <ResultsDisplay results={results} />}
+        {results && !loading && (
+          <ResultsDisplay results={results} />
+        )}
       </main>
-
-      <footer className="border-t border-gray-800 bg-gray-900 bg-opacity-50 mt-20">
-        <div className="container mx-auto px-4 py-8 text-center text-gray-400">
-          <p className="mb-2">Built for GitLab Hackathon Challenge 2025</p>
-          <p className="text-sm">i-Hack 2025 | E-Summit, IIT Bombay</p>
-          <div className="mt-4 flex items-center justify-center gap-4 text-sm">
-            <a href="https://gitlab.com" target="_blank" rel="noopener noreferrer" 
-               className="hover:text-gitlab-orange transition-colors">
-              GitLab
-            </a>
-            <span>•</span>
-            <a href="https://zenyukti.in" target="_blank" rel="noopener noreferrer"
-               className="hover:text-gitlab-purple transition-colors">
-                Team ZenYukti
-            </a>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

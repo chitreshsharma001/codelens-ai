@@ -15,7 +15,7 @@ export default function Hero() {
       </p>
 
       <p className="text-gray-400 text-sm italic">
-        Powered by Gemini AI | Built by <a href="https://zenyukti.in" target="_blank" rel="noopener noreferrer"><u>Team ZenYukti</u></a>
+        Powered by Gemini AI
       </p>
 
       {/* Features Grid */}

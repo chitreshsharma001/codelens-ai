@@ -20,7 +20,7 @@ def health_check():
     """Health check endpoint"""
     return jsonify({
         'status': 'healthy',
-        'message': 'RepoInsight AI is running'
+        'message': 'CodeLens AI is running'
     })
 
 @app.route('/api/analyze', methods=['POST'])

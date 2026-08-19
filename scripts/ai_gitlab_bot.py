@@ -27,7 +27,7 @@ def run_ai_review():
     }
     
     payload = {
-        "body": f"**🤖 RepoInsight AI Review:**\n\n{ai_summary}\n\n*This automated analysis was triggered by the CI pipeline to ensure code quality.*"
+        "body": f"**🤖 CodeLens AI Review:**\n\n{ai_summary}\n\n*This automated analysis was triggered by the CI pipeline to ensure code quality.*"
     }
     
     try:

@@ -5,7 +5,7 @@ export default function AnalysisForm({ onAnalyze, disabled }) {
   const [repoUrl, setRepoUrl] = useState('')
   const [urlError, setUrlError] = useState('')
 
-  const DEMO_REPO = 'https://gitlab.com/ayushHardeniya/repoinsight-ai'
+  const DEMO_REPO = 'https://gitlab.com/gitlab-org/gitlab'
 
   const validateGitLabUrl = (url) => {
     const gitlabPattern = /^https:\/\/gitlab\.com\/[\w-]+\/[\w-]+/i

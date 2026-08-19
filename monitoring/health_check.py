@@ -5,7 +5,7 @@ from time import sleep
 
 # The public URL of the deployed service (e.g., frontend URL)
 # RENDER_EXTERNAL_URL is available in paid Render tiers; fallback to hardcoded URL
-SERVICE_URL = os.environ.get("RENDER_EXTERNAL_URL", "https://repoinsight-ai-frontend.onrender.com")
+SERVICE_URL = os.environ.get("RENDER_EXTERNAL_URL", "https://codelens-ai-frontend.onrender.com")
 
 def run_health_check(url, max_retries=5, delay=5):
     """Pings the deployed service URL to check for a 200 OK status."""
