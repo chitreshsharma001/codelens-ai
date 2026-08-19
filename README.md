@@ -1,4 +1,4 @@
-# RepoInsight AI
+# CodeLens AI
 
 ### Check Live Project
 [Click Here](https://repoinsight-ai-frontend.onrender.com/)
