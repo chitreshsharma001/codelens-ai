@@ -2,6 +2,8 @@
 
 React 18, Vite and Tailwind CSS frontend for the JavaScript backend.
 
+Rollup uses its official WebAssembly package so the frontend can run on systems that restrict native Node.js modules.
+
 ```sh
 npm install
 npm run dev
