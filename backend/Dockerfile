@@ -1,16 +1,15 @@
-FROM python:3.11-slim
+FROM node:24-alpine
 
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# The backend uses only Node.js built-in modules.
+ENV NODE_ENV=production
 
 # Copy application code
-COPY . .
+COPY --chown=node:node . .
+USER node
 
 # Expose port
 EXPOSE 5000
 
-# Run with gunicorn for production
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "--timeout", "120", "app:app"]
+CMD ["node", "server.js"]

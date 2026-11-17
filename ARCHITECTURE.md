@@ -15,8 +15,8 @@ graph TB
         D[API Client]
     end
     
-    subgraph "Backend - Flask API"
-        E[Flask Server]
+    subgraph "Backend - Node.js API"
+        E[Node.js Server]
         F[GitLab Service]
         G[AI Service]
     end
@@ -85,10 +85,11 @@ frontend/src/
 
 ```
 backend/
-├── app.py                    # Flask application entry point
+├── server.js                 # Environment loading and server startup
+├── app.js                    # HTTP routes
 └── services/
-    ├── gitlab_service.py     # GitLab API integration
-    └── ai_service.py         # Gemini AI integration
+    ├── gitlab_service.js     # GitLab API integration
+    └── ai_service.js         # Gemini AI integration
 ```
 
 **Service Responsibilities:**
@@ -139,7 +140,7 @@ graph LR
 2. **Service Layer Pattern (Backend)**
    - Separation of concerns
    - Business logic in services
-   - Flask routes only handle HTTP
+   - Node.js routes only handle HTTP
 
 3. **Repository Pattern (Implied)**
    - GitLabService abstracts data fetching
@@ -178,24 +179,25 @@ repoinsight-ai/
 │   ├── tailwind.config.js            # Tailwind customization
 │   └── vite.config.js                # Vite build configuration
 │
-├── backend/                           # Flask Backend
+├── backend/                           # Node.js Backend
 │   ├── services/
-│   │   ├── ai_service.py             # Gemini AI integration
-│   │   └── gitlab_service.py         # GitLab API wrapper
+│   │   ├── ai_service.js             # Gemini AI integration
+│   │   └── gitlab_service.js         # GitLab API wrapper
 │   ├── .env                          # Backend environment variables
-│   ├── app.py                        # Flask application
+│   ├── app.js                        # Node.js application
 │   ├── Dockerfile                    # Backend container config
-│   └── requirements.txt              # Python dependencies
+│   ├── server.js                     # Environment loading and startup
+│   └── package.json                  # Node.js scripts and runtime requirement
 │
 ├── .gitlab/
 │   └── ci/
 │       └── environments.yml          # CI/CD environment configs
 │
 ├── monitoring/
-│   └── health_check.py               # Service health monitoring
+│   └── health_check.js               # Service health monitoring
 │
 ├── scripts/
-│   └── ai_gitlab_bot.py              # Automation scripts
+│   └── ai_gitlab_bot.js              # Automation scripts
 │
 ├── .gitignore                        # Git ignore rules
 ├── .gitlab-ci.yml                    # CI/CD pipeline definition

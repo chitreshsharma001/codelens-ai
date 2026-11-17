@@ -1,61 +1,26 @@
-# Backend README.md
+# CodeLens AI backend
 
-# RepoInsight AI Backend
+JavaScript API using Node.js built-in HTTP, fetch, environment loading and test runner. No third-party runtime dependencies are required. Requires Node.js 24+.
 
-This is the backend component of the RepoInsight AI project, built using Flask. The backend serves as the API for the frontend application, providing endpoints to interact with repository data.
-
-## Getting Started
-
-### Prerequisites
-
-- Python 3.7 or higher
-- pip (Python package installer)
-
-### Installation
-
-1. Clone the repository:
-
-   git clone https://github.com/yourusername/repoinsight-ai.git
-
-2. Navigate to the backend directory:
-
-   cd repoinsight-ai/backend
-
-3. Install the required packages:
-
-   pip install -r requirements.txt
-
-### Running the Application
-
-To run the Flask application, execute the following command:
-
-```bash
-python app/main.py
+```sh
+cd backend
+npm start
 ```
 
-The application will start on `http://127.0.0.1:5000/` by default.
+Use `npm run dev` for automatic restarts and `npm test` for mocked API and service tests.
 
-### Docker
+Copy the root `.env.example` to `.env` and set `GEMINI_API_KEY`. The server loads `backend/.env` first, then the root `.env`, without overriding existing environment variables. Optional settings: `GITLAB_API_TOKEN`, `GEMINI_MODEL` (default `gemini-flash-lite-latest`) and `PORT` (default 5000). The server binds to `0.0.0.0`.
 
-To run the application using Docker, you can build and run the Docker container:
+API routes:
 
-1. Build the Docker image:
+- `GET /api/health`: health status.
+- `POST /api/analyze`: accepts `{"repo_url":"https://gitlab.com/group/project"}` and returns `success`, `repository`, `analysis`, and `documentation`.
+- `POST /api/generate-readme`: same request body; returns `success` and a Markdown `readme` string.
 
-   docker build -t repoinsight-ai-backend .
+Public GitLab.com projects work without a token; private projects require repository read access. Nested subgroups and clone URLs ending in `.git` are supported. Pass a project URL rather than a branch or file URL.
 
-2. Run the Docker container:
+Invalid JSON and missing/invalid URLs return 400. GitLab errors retain their status, including friendly 429 responses. Unavailable optional metadata falls back to empty values. Gemini errors return clearly marked fallback analysis and documentation; check server logs for the reason. Fallback scores of 5 are placeholders, not measured results.
 
-   docker run -p 5000:5000 repoinsight-ai-backend
+Docker: run `docker build -t codelens-backend backend` from the root, then `docker run --env-file .env -p 5000:5000 codelens-backend`.
 
-### API Endpoints
-
-- `/api/repositories`: Get a list of repositories.
-- `/api/repositories/<id>`: Get details of a specific repository.
-
-### Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or features.
-
-### License
-
-This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+For Render, select Node, set the root directory to `backend`, build command to `npm install`, and start command to `npm start`. Set API keys in the deployment environment.

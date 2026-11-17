@@ -17,7 +17,7 @@ function App() {
     setError(null)
     setResults(null)
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://codelens-ai.onrender.com'
+      const apiUrl = import.meta.env.VITE_API_URL || ''
       console.log('API URL:', apiUrl)
       const response = await fetch(`${apiUrl}/api/analyze`, {
         method: 'POST',

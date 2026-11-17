@@ -20,19 +20,16 @@ variables:
 
 test:backend:
   stage: test
-  image: python:3.11-slim
+  image: node:24-alpine
   script:
     - cd backend
-    - pip install -r requirements.txt
-    - python -m py_compile app.py
-    - python -c "from services.gitlab_service import GitLabService"
-    - python -c "from services.ai_service import AIService"
+    - npm test
     - echo "✅ Backend tests passed"
-  allow_failure: true
+  allow_failure: false
 
 test:frontend:
   stage: test
-  image: node:18-alpine
+  image: node:24-alpine
   script:
     - cd frontend
     - npm install
@@ -43,10 +40,9 @@ test:frontend:
 # AI Auto-Review (Demonstrates Agentic Workflow)
 ai:auto_review:
   stage: test
-  image: python:3.11-slim
+  image: node:24-alpine
   script:
-    - pip install requests
-    - python scripts/ai_gitlab_bot.py
+    - node scripts/ai_gitlab_bot.js
   only:
     - merge_requests
   allow_failure: true
@@ -109,10 +105,9 @@ build:frontend:
 
 health_monitor:
   stage: monitor
-  image: python:3.11-slim
+  image: node:24-alpine
   script:
-    - pip install requests
-    - python monitoring/health_check.py
+    - node monitoring/health_check.js
   only:
     - main
     - master
